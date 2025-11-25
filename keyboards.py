@@ -15,3 +15,17 @@ async def get_main_keyboard():
     return InlineKeyboardMarkup(
         inline_keyboard=buttons
     )
+
+
+async def write_or_back():
+    buttons = [
+        [
+            InlineKeyboardButton(text='Napisz', callback_data='write'),
+        ],
+        [
+            InlineKeyboardButton(text='Strona główna', callback_data='home'),
+        ]
+    ]
+    return InlineKeyboardMarkup(
+        inline_keyboard=buttons
+    )
