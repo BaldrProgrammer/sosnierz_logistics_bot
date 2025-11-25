@@ -7,4 +7,4 @@ router = Router()
 
 @router.message(CommandStart())
 async def start(message: Message):
-    await message.answer('siema')
+    await message.answer('Witaj!\nJesteśmy Sośnierz Logistic.\nW czym możemy pomóc?')
