@@ -18,7 +18,13 @@ async def start(message: Message):
 async def contact(callback_data: CallbackQuery):
     keyboard = await write_or_back()
     with open('texts/kontakt.txt', 'r', encoding='utf-8') as file:
-        await callback_data.message.edit_text(file.read(), reply_markup=keyboard)
+        await callback_data.message.edit_media(
+            media=InputMediaPhoto(
+                media=FSInputFile("media/contact.png"),
+                caption=file.read()
+            ),
+            reply_markup=keyboard
+        )
 
 
 @router.callback_query(F.data.startswith('home'))
