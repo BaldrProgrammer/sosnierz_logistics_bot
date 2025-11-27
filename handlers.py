@@ -104,3 +104,10 @@ async def write_fsm_theme(message: Message, state: FSMContext):
     await state.update_data(number=message.text)
     await state.set_state(FSMForm.theme)
     await message.message.edit_text('Proszę podać temat zgłoszenia')
+
+
+@router.message(FSMForm.theme)
+async def write_fsm_text(message: Message, state: FSMContext):
+    await state.update_data(theme=message.text)
+    await state.set_state(FSMForm.text)
+    await message.message.edit_text('I treść zgłoszenia')
