@@ -83,3 +83,10 @@ async def contact(callback_data: CallbackQuery):
 async def write_fsm_name(callback_data: CallbackQuery, state: FSMContext):
     await state.set_state(FSMForm.name)
     await callback_data.message.edit_text('Proszę o wprowadzenie swojego imienia')
+
+
+@router.message(FSMForm.name)
+async def write_fsm_email(message: Message, state: FSMContext):
+    await state.update_data(name=Message.text)
+    await state.set_state(FSMForm.email)
+    await message.message.edit_text('Proszę podać swój e-mail')
