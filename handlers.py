@@ -92,7 +92,7 @@ async def write_fsm_email(message: Message, state: FSMContext):
     await message.message.edit_text('Proszę podać swój e-mail')
 
 
-@router.message(FSMForm.name)
+@router.message(FSMForm.email)
 async def write_fsm_number(message: Message, state: FSMContext):
     await state.update_data(email=Message.text)
     await state.set_state(FSMForm.number)
