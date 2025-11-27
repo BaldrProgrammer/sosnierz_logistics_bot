@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
 from aiogram.fsm.state import State, StatesGroup
+from aiogram.fsm.context import FSMContext
 from keyboards import get_main_keyboard, write_or_back
 from emailtest import send_email
 
@@ -79,14 +80,6 @@ async def contact(callback_data: CallbackQuery):
 
 
 @router.callback_query(F.data.startswith('write'))
-async def write(callback_data: CallbackQuery):
-    send_email(
-        smtp_host="smtp.gmail.com",
-        smtp_port=465,
-        username="sosnierzbot@gmail.com",
-        password="nnsu nldw bgbb edjr",
-        sender="sosnierzbot@gmail.com",
-        to="boliklevik@gmail.com",
-        subject="Тестовое письмо",
-        body="Привет! Это письмо отправлено из Python."
-    )
+async def write_fsm_name(callback_data: CallbackQuery, state: FSMContext):
+    await state.set_state(FSMForm.name)
+    await callback_data.message.edit_text('Proszę o wprowadzenie swojego imienia')
