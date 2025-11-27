@@ -1,6 +1,6 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
-from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
+from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from keyboards import get_main_keyboard, write_or_back
@@ -95,8 +95,11 @@ async def write_fsm_email(message: Message, state: FSMContext):
 @router.message(FSMForm.email)
 async def write_fsm_number(message: Message, state: FSMContext):
     await state.update_data(email=message.text)
+    button_phone = KeyboardButton(text='Wyślij numer', request_contact=True)
+    keyboard = ReplyKeyboardMarkup(resize_keyboard=True, one_time_keyboard=True)
+    keyboard.add(button_phone)
     await state.set_state(FSMForm.number)
-    await message.message.edit_text('A w tym momencie proszę wpisać swój numer telefonu')
+    await message.message.edit_text('A w tym momencie proszę wpisać swój numer telefonu', reply_markup=keyboard)
 
 
 @router.message(FSMForm.number)
