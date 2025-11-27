@@ -35,6 +35,14 @@ async def contact(callback_data: CallbackQuery):
         await callback_data.message.answer(file.read(), reply_markup=keyboard)
 
 
+@router.callback_query(F.data.startswith('career'))
+async def contact(callback_data: CallbackQuery):
+    keyboard = await write_or_back()
+    with open('texts/career.txt', 'r', encoding='utf-8') as file:
+        await callback_data.message.delete()
+        await callback_data.message.answer(file.read(), reply_markup=keyboard)
+
+
 
 @router.callback_query(F.data.startswith('contact'))
 async def contact(callback_data: CallbackQuery):
