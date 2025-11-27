@@ -27,6 +27,15 @@ async def contact(callback_data: CallbackQuery):
         )
 
 
+@router.callback_query(F.data.startswith('offer'))
+async def contact(callback_data: CallbackQuery):
+    keyboard = await write_or_back()
+    with open('texts/oferta.txt', 'r', encoding='utf-8') as file:
+        await callback_data.message.delete()
+        await callback_data.message.answer(file.read(), reply_markup=keyboard)
+
+
+
 @router.callback_query(F.data.startswith('contact'))
 async def contact(callback_data: CallbackQuery):
     keyboard = await write_or_back()
