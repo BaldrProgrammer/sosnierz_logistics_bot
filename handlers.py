@@ -2,6 +2,7 @@ from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
 from keyboards import get_main_keyboard, write_or_back
+from emailtest import send_email
 
 router = Router()
 
@@ -43,7 +44,6 @@ async def contact(callback_data: CallbackQuery):
         await callback_data.message.answer(file.read(), reply_markup=keyboard)
 
 
-
 @router.callback_query(F.data.startswith('contact'))
 async def contact(callback_data: CallbackQuery):
     keyboard = await write_or_back()
@@ -67,3 +67,18 @@ async def contact(callback_data: CallbackQuery):
         ),
         reply_markup=keyboard
     )
+
+
+@router.callback_query(F.data.startswith('write'))
+async def write(callback_data: CallbackQuery):
+    send_email(
+        smtp_host="smtp.gmail.com",
+        smtp_port=465,
+        username="sosnierzbot@gmail.com",
+        password="nnsu nldw bgbb edjr",
+        sender="sosnierzbot@gmail.com",
+        to="boliklevik@gmail.com",
+        subject="Тестовое письмо",
+        body="Привет! Это письмо отправлено из Python."
+    )
+
