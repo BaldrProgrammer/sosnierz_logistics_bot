@@ -1,10 +1,19 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto
+from aiogram.fsm.state import State, StatesGroup
 from keyboards import get_main_keyboard, write_or_back
 from emailtest import send_email
 
 router = Router()
+
+
+class FSMForm(StatesGroup):
+    name: str = State()
+    email: str = State()
+    number: str = State()
+    theme: str = State()
+    text: str = State()
 
 
 @router.message(CommandStart())
@@ -81,4 +90,3 @@ async def write(callback_data: CallbackQuery):
         subject="Тестовое письмо",
         body="Привет! Это письмо отправлено из Python."
     )
-
