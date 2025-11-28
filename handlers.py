@@ -103,12 +103,12 @@ async def write_fsm_number(message: Message, state: FSMContext):
         one_time_keyboard=True
     )
     await state.set_state(FSMForm.number)
-    await message.answer('A w tym momencie proszę wpisać swój numer telefonu', reply_markup=keyboard)
+    await message.answer('Proszę podać swój numer telefonu', reply_markup=keyboard)
 
 
-@router.message(FSMForm.number)
+@router.message(F.contact)
 async def write_fsm_theme(message: Message, state: FSMContext):
-    await state.update_data(number=message.text)
+    await state.update_data(number=message.contact.phone_number)
     await state.set_state(FSMForm.theme)
     await message.answer('Proszę podać temat zgłoszenia')
 
@@ -118,3 +118,33 @@ async def write_fsm_text(message: Message, state: FSMContext):
     await state.update_data(theme=message.text)
     await state.set_state(FSMForm.text)
     await message.answer('I treść zgłoszenia')
+
+
+@router.message(FSMForm.text)
+async def write_email(message: Message, state: FSMContext):
+    await state.update_data(text=message.text)
+    data = await state.get_data()
+    tresc = f'''
+    Człowiek o imieniu {data['name']} zgłosił się do bota Telegram Sośnierz.
+
+    Temat zgłoszenia:
+    {data['theme']}
+    
+    Treść zgłoszenia:
+    {data['text']}
+    
+    ---
+    Dane kontaktowe:
+    Numer telefonu: {data['number']}
+    Adres e-mail: {data['email']}
+    '''
+    send_email(
+        smtp_host="smtp.gmail.com",
+        smtp_port=465,
+        username="sosnierzbot@gmail.com",
+        password="nnsu nldw bgbb edjr",
+        sender="sosnierzbot@gmail.com",
+        to="boliklevik@gmail.com",
+        subject=f"OTRZYMANO ZGŁOSZENIE PRZEZ TELEGRAM OD {data['name']}",
+        body=tresc
+    )
