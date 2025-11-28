@@ -1,8 +1,8 @@
 from aiogram import Router, F
 from aiogram.filters import CommandStart
-from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, ReplyKeyboardMarkup, KeyboardButton
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
+from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
 from keyboards import get_main_keyboard, write_or_back
 from emailtest import send_email
 
@@ -96,9 +96,8 @@ async def write_fsm_email(message: Message, state: FSMContext):
 async def write_fsm_number(message: Message, state: FSMContext):
     await state.update_data(email=message.text)
     button_phone = KeyboardButton(text='Wyślij numer', request_contact=True)
-    # Создаем клавиатуру через параметр keyboard
     keyboard = ReplyKeyboardMarkup(
-        keyboard=[[button_phone]],  # список списков кнопок
+        keyboard=[[button_phone]],
         resize_keyboard=True,
         one_time_keyboard=True
     )
@@ -110,7 +109,7 @@ async def write_fsm_number(message: Message, state: FSMContext):
 async def write_fsm_theme(message: Message, state: FSMContext):
     await state.update_data(number=message.contact.phone_number)
     await state.set_state(FSMForm.theme)
-    await message.answer('Proszę podać temat zgłoszenia')
+    await message.answer('Proszę podać temat zgłoszenia', reply_markup=ReplyKeyboardRemove())
 
 
 @router.message(FSMForm.theme)
@@ -125,19 +124,19 @@ async def write_email(message: Message, state: FSMContext):
     await state.update_data(text=message.text)
     data = await state.get_data()
     tresc = f'''
-    Człowiek o imieniu {data['name']} zgłosił się do bota Telegram Sośnierz.
+Człowiek o imieniu {data['name']} zgłosił się do bota Telegram Sośnierz.
 
-    Temat zgłoszenia:
-    {data['theme']}
+Temat zgłoszenia:
+{data['theme']}
     
-    Treść zgłoszenia:
-    {data['text']}
+Treść zgłoszenia:
+{data['text']}
     
-    ---
-    Dane kontaktowe:
-    Numer telefonu: {data['number']}
-    Adres e-mail: {data['email']}
-    '''
+---
+Dane kontaktowe:
+Numer telefonu: {data['number']}
+Adres e-mail: {data['email']}
+'''
     send_email(
         smtp_host="smtp.gmail.com",
         smtp_port=465,

@@ -29,3 +29,14 @@ async def write_or_back():
     return InlineKeyboardMarkup(
         inline_keyboard=buttons
     )
+
+
+async def back_keyboard():
+    buttons = [
+        [
+            InlineKeyboardButton(text='Strona główna', callback_data='home'),
+        ]
+    ]
+    return InlineKeyboardMarkup(
+        inline_keyboard=buttons
+    )
