@@ -3,7 +3,7 @@ from aiogram.filters import CommandStart
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.context import FSMContext
 from aiogram.types import Message, CallbackQuery, FSInputFile, InputMediaPhoto, ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
-from keyboards import get_main_keyboard, write_or_back
+from keyboards import get_main_keyboard, write_or_back, back_keyboard
 from emailtest import send_email
 
 router = Router()
@@ -147,3 +147,8 @@ Adres e-mail: {data['email']}
         subject=f"OTRZYMANO ZGŁOSZENIE PRZEZ TELEGRAM OD {data['name']}",
         body=tresc
     )
+
+    keyboard = await back_keyboard()
+    await message.answer_photo(photo=FSInputFile("media/tresc_wyslana.png"),
+                               caption='Zgłoszenie zostało wysłane do naszego personelu. Proszę oczekiwać odpowiedzi telefonicznie lub mailowo.',
+                               reply_markup=keyboard)
